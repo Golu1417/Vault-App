@@ -16,7 +16,8 @@ import {
   CheckCircle2,
   Save,
   AlertTriangle,
-  Download
+  Download,
+  Lock
 } from 'lucide-react';
 import type { VaultSettings, AuthMode, DisguiseType, ThemeMode } from '../types';
 import { getCurrentTimePin } from '../utils/security';
@@ -47,6 +48,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const [timeFormat, setTimeFormat] = useState<'24h' | '12h'>(settings.timeFormat || '24h');
   const [securityQuestion, setSecurityQuestion] = useState(settings.securityQuestion);
   const [securityAnswer, setSecurityAnswer] = useState(settings.securityAnswer);
+  const [autoLockOnMinimize, setAutoLockOnMinimize] = useState(settings.autoLockOnMinimize !== false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [savedNotice, setSavedNotice] = useState(false);
 
@@ -61,6 +63,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
       theme,
       soundEnabled,
       timeFormat,
+      autoLockOnMinimize,
       securityQuestion,
       securityAnswer: securityAnswer.trim().toLowerCase(),
     });
@@ -355,7 +358,36 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
             </div>
           </div>
 
-          {/* Section 5: Security Question Backup */}
+          {/* Section 5: Auto-Lock on Minimize / Background */}
+          <div>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
+              Privacy & Auto-Lock
+            </h4>
+            <div className="p-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-850">
+              <div className="flex items-center gap-3">
+                <div className={`p-2 rounded-xl transition ${autoLockOnMinimize ? 'bg-indigo-500/10 text-indigo-500' : 'bg-slate-200 dark:bg-slate-800 text-slate-400'}`}>
+                  <Lock className="w-4 h-4" />
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-slate-900 dark:text-white block">
+                    Auto-Lock on Minimize
+                  </span>
+                  <span className="text-[11px] text-slate-500 dark:text-slate-400">
+                    Immediately returns to calculator when minimized or switching apps
+                  </span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setAutoLockOnMinimize(!autoLockOnMinimize)}
+                className={`w-11 h-6 rounded-full transition-colors relative shrink-0 ${autoLockOnMinimize ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-700'}`}
+              >
+                <div className={`w-4 h-4 rounded-full bg-white transition-transform absolute top-1 ${autoLockOnMinimize ? 'right-1' : 'left-1'}`} />
+              </button>
+            </div>
+          </div>
+
+          {/* Section 6: Security Question Backup */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
               Recovery Question

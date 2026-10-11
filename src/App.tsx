@@ -55,6 +55,31 @@ export const App: React.FC = () => {
     applyDisguise(settings.disguise);
   }, [settings?.theme, settings?.disguise]);
 
+  // Auto-lock when app is minimized, tab hidden, or device backgrounded
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') {
+        if (settings?.autoLockOnMinimize !== false) {
+          setIsUnlocked(false);
+        }
+      }
+    };
+
+    const handlePageHide = () => {
+      if (settings?.autoLockOnMinimize !== false) {
+        setIsUnlocked(false);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.addEventListener('pagehide', handlePageHide);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('pagehide', handlePageHide);
+    };
+  }, [settings?.autoLockOnMinimize]);
+
   const handleUpdateSettings = async (updated: Partial<VaultSettings>) => {
     if (!settings) return;
     const newSettings = { ...settings, ...updated };

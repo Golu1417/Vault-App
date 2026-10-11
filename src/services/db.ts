@@ -13,6 +13,7 @@ const DEFAULT_SETTINGS: VaultSettings = {
   theme: 'dark',
   soundEnabled: true,
   timeFormat: '24h',
+  autoLockOnMinimize: true,
 };
 
 class VaultDatabase {

@@ -35,6 +35,7 @@ export interface VaultSettings {
   soundEnabled: boolean;
   timeFormat: '24h' | '12h';
   recoveryPin?: string;
+  autoLockOnMinimize?: boolean;
 }
 
 export interface DisguiseMeta {
